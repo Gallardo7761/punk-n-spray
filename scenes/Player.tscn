@@ -1,0 +1,119 @@
+[gd_scene load_steps=9 format=3 uid="uid://c5v4a4xjhe832"]
+
+[ext_resource type="Texture2D" uid="uid://b86ypj12qw38q" path="res://art/sprites/tilemap-characters.png" id="1_uatny"]
+
+[sub_resource type="GDScript" id="GDScript_gf6an"]
+script/source = "extends CharacterBody2D
+
+# Variable definitions
+const SPEED = 300.0
+const JUMP_VELOCITY = -400.0
+var SCREEN_SIZE
+
+# Initialize things
+func _ready() -> void:
+	SCREEN_SIZE = get_viewport_rect().size
+
+# Game loop
+func _process(delta: float) -> void:
+	
+	# Animations	
+	if velocity.x != 0:
+		$AnimatedSprite2D.play()
+		$AnimatedSprite2D.animation = \"walk\"
+		$AnimatedSprite2D.flip_v = false
+		$AnimatedSprite2D.flip_h = velocity.x > 0
+	else:
+		$AnimatedSprite2D.stop()
+	
+	# Add the gravity.
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+	# Handle jump.
+	if Input.is_action_just_pressed(\"jump\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration
+	var direction := Input.get_axis(\"move_left\", \"move_right\")
+	if direction:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+
+	move_and_slide()
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mmel5"]
+atlas = ExtResource("1_uatny")
+region = Rect2(100, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d4a5s"]
+atlas = ExtResource("1_uatny")
+region = Rect2(125, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ywr77"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mmel5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d4a5s")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 6.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wmiyk"]
+height = 24.0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qiyb1"]
+texture = ExtResource("1_uatny")
+separation = Vector2i(1, 1)
+texture_region_size = Vector2i(24, 24)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_7m8sk"]
+tile_size = Vector2i(24, 24)
+sources/0 = SubResource("TileSetAtlasSource_qiyb1")
+
+[node name="Player" type="CharacterBody2D"]
+script = SubResource("GDScript_gf6an")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ywr77")
+animation = &"walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_wmiyk")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_7m8sk")
