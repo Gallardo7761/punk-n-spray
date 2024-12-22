@@ -9,3 +9,7 @@
 
 [node name="Player" parent="." instance=ExtResource("2_ron50")]
 position = Vector2(143, 492)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(144, -6)
+zoom = Vector2(2.5, 2.5)
