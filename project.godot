@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Punk n Spray"
 run/main_scene="res://scenes/Main.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://art/icons/icon.svg"
 
 [dotnet]
@@ -55,3 +55,10 @@ sprint={
 , Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":4,"axis_value":1.0,"script":null)
 ]
 }
+
+[layer_names]
+
+2d_physics/layer_1="World"
+2d_physics/layer_2="Platforms"
+2d_physics/layer_3="Player"
+2d_physics/layer_4="Enemies"
