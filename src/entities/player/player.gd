@@ -3,47 +3,58 @@ extends CharacterBody2D
 # Variable definitions
 const SPEED = 50.0
 const JUMP_VELOCITY = -400.0
-var SCREEN_SIZE
+
+# Action variables
+var RUN_ACTION = Input.is_action_pressed("run")
+var JUMP_ACTION = Input.is_action_pressed("jump")
+var WALK_ACTION = Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right")
+var WALK_RIGHT = Input.is_action_pressed("move_right")
+var WALK_LEFT = Input.is_action_pressed("move_left")
+var CROUCH_ACTION = Input.is_action_pressed("crouch")
+
+# Misc variables
+var screen_size
 var original_collision_mask
 
 # Initialize things
 func _ready() -> void:
-	SCREEN_SIZE = get_viewport_rect().size
+	screen_size = get_viewport_rect().size
 	original_collision_mask = collision_mask
 	
 # Game loop
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
+	RUN_ACTION = Input.is_action_pressed("run")
+	JUMP_ACTION = Input.is_action_pressed("jump")
+	WALK_ACTION = Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right")
+	WALK_RIGHT = Input.is_action_pressed("move_right")
+	WALK_LEFT = Input.is_action_pressed("move_left")
+	CROUCH_ACTION = Input.is_action_pressed("crouch")
+
 	# Animations
 	$AnimatedSprite2D.play()
 	$AnimatedSprite2D.flip_v = false
 	$AnimatedSprite2D.flip_h = velocity.x < 0
-	if velocity.x != 0: # Moving animations
-		if Input.is_action_pressed("run"):
-			if Input.is_action_pressed("jump"):
-				if is_on_floor():
-					$AnimatedSprite2D.animation = "run"
-				else:
-					$AnimatedSprite2D.animation = "jump"
+	
+	# Moving animations
+	if velocity.x != 0:
+		if RUN_ACTION:
+			if JUMP_ACTION and not is_on_floor():
+				$AnimatedSprite2D.animation = "jump"
 			else:
 				$AnimatedSprite2D.animation = "run"
-		elif Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right"):
-			if Input.is_action_pressed("crouch"):
+		elif WALK_ACTION:
+			if CROUCH_ACTION:
 				$AnimatedSprite2D.animation = "crouch_walk"
-			elif Input.is_action_pressed("jump"):
-				if is_on_floor():
-					$AnimatedSprite2D.animation = "walk"
-				else:
-					$AnimatedSprite2D.animation = "jump"
+			elif JUMP_ACTION and not is_on_floor():
+				$AnimatedSprite2D.animation = "jump"
 			else:
 				$AnimatedSprite2D.animation = "walk"
-	else: # Idle animations
-		if Input.is_action_pressed("crouch"):
+	# Idle animations
+	else: 
+		if CROUCH_ACTION:
 			$AnimatedSprite2D.animation = "crouch_idle"
-		elif Input.is_action_pressed("jump"):
-			if is_on_floor():
-				$AnimatedSprite2D.animation = "idle"
-			else:
-				$AnimatedSprite2D.animation = "jump"
+		elif JUMP_ACTION and not is_on_floor():
+			$AnimatedSprite2D.animation = "jump"
 		else:
 			$AnimatedSprite2D.animation = "idle"
 
@@ -87,8 +98,3 @@ func _physics_process(delta: float) -> void:
 # is the platforms' collision mask
 func is_on_platform():
 	return is_on_floor() and collision_mask == 3
-
-# Auxiliary function that returns if the player 
-# is in the air by negating is_on_floor()
-func is_on_air():
-	return not is_on_floor()
