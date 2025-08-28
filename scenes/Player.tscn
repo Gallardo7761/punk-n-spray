@@ -1,6 +1,5 @@
-[gd_scene load_steps=74 format=3 uid="uid://c5v4a4xjhe832"]
+[gd_scene load_steps=73 format=3 uid="uid://c5v4a4xjhe832"]
 
-[ext_resource type="Script" path="res://src/entities/player/player.gd" id="1_sq3kv"]
 [ext_resource type="Texture2D" uid="uid://5j6cf0fssina" path="res://art/sprites/PlayerWalk 48x48.png" id="2_1hyc4"]
 [ext_resource type="Texture2D" uid="uid://bmi2lvb6o4hbr" path="res://art/sprites/player run 48x48.png" id="2_dcgkk"]
 [ext_resource type="Texture2D" uid="uid://cks3q4o02s7gt" path="res://art/sprites/Player Crouch-Idle 48x48.png" id="2_gos5p"]
@@ -530,7 +529,6 @@ sources/0 = SubResource("TileSetAtlasSource_yho6t")
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 4
 collision_mask = 3
-script = ExtResource("1_sq3kv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_wmiyk")

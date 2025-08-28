@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dssr27iktcld"]
+[gd_scene load_steps=4 format=3 uid="uid://dssr27iktcld"]
 
 [ext_resource type="PackedScene" uid="uid://glgyen0w4614" path="res://scenes/Level1.tscn" id="1_7a2cc"]
 [ext_resource type="PackedScene" uid="uid://c5v4a4xjhe832" path="res://scenes/Player.tscn" id="2_ron50"]
+[ext_resource type="Script" uid="uid://uvuk2xh0skdi" path="res://src/entities/player/Player.cs" id="3_0bbpv"]
 
 [node name="Main" type="Node"]
 
@@ -9,6 +10,7 @@
 
 [node name="Player" parent="." instance=ExtResource("2_ron50")]
 position = Vector2(143, 492)
+script = ExtResource("3_0bbpv")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(144, -6)
